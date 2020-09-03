@@ -117,7 +117,7 @@ Here I want to have no security for url starting with /v2
     public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
         /**
-         * To configure security such that the url starting with /v2 does not require authentication
+         * To configure security such that the url starting with /v2 does not require authorization
          *
          * @param http
          * @throws Exception
