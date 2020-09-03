@@ -2,7 +2,7 @@ package com.arun.springsecuritycore.controller;
 
 import com.arun.springsecuritycore.domain.Student;
 import com.arun.springsecuritycore.service.StudentService;
-import org.apache.coyote.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +15,7 @@ import java.util.List;
  */
 
 @RestController
+@Slf4j
 public class StudentController {
 
     private final StudentService studentService;
@@ -23,8 +24,9 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/v1/student")
+    @GetMapping(value = "/v1/student", produces = "application/json")
     public ResponseEntity<List<Student>> getStudent(@RequestParam String name) {
+        log.info("inside the controller");
         List<Student> students = studentService.getStudent(name);
         return ResponseEntity.ok(students);
     }
