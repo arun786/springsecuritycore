@@ -13,3 +13,15 @@ spring:
     password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+
+  profiles:
+    active: basic
+
+---
+
+spring:
+  profiles: basic
+  security:
+    user:
+      name: student
+      password: dXNlcjo2N2VlM2IzZC1iODRmLTQxYzgtOWUxMS01ZTg3ZjAwNTE3MWY=
