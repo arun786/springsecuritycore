@@ -5,6 +5,7 @@ import com.arun.springsecuritycore.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +30,12 @@ public class StudentController {
         log.info("inside the controller");
         List<Student> students = studentService.getStudent(name);
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping(value = "/v2/student/{id}", produces = "application/json")
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+        log.info("inside the controller");
+        Student studentById = studentService.getStudentById(id);
+        return ResponseEntity.ok(studentById);
     }
 }
