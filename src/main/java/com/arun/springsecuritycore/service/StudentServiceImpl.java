@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author arun on 8/29/20
@@ -38,5 +39,12 @@ public class StudentServiceImpl implements StudentService {
         });
 
         return students;
+    }
+
+    @Override
+    public Student getStudentById(Long id) {
+
+        Optional<StudentDomain> student = studentRepository.findById(id);
+        return student.map(studentMapper::studentDomainToStudent).orElse(null);
     }
 }
