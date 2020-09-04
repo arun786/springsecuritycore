@@ -30,3 +30,8 @@ spring:
 
 spring:
   profiles: basic_user
+
+---
+
+spring:
+  profiles: fluent_api_user
