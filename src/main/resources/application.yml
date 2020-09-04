@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
 
   profiles:
-    active: basic
+    active: basic_user
 
 ---
 
@@ -25,3 +25,8 @@ spring:
     user:
       name: student
       password: dXNlcjo2N2VlM2IzZC1iODRmLTQxYzgtOWUxMS01ZTg3ZjAwNTE3MWY=
+
+---
+
+spring:
+  profiles: basic_user
