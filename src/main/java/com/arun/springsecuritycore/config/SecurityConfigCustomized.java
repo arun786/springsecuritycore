@@ -20,7 +20,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableWebSecurity
 @Configuration
 @Profile("basic_user")
-@Order(100)
+@Order(102)
 public class SecurityConfigCustomized extends WebSecurityConfigurerAdapter {
 
     /**
