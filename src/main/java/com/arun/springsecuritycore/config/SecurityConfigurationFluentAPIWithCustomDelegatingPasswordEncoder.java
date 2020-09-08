@@ -1,5 +1,6 @@
 package com.arun.springsecuritycore.config;
 
+import com.arun.springsecuritycore.security.StudentPasswordEncoderFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -9,15 +10,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @EnableWebSecurity
 @Configuration
-@Order(106)
-@Profile("fluent_api_user_delegating_password_encoder")
-public class SecurityConfigurationFluentAPIWithDelegatingPasswordEncoder extends WebSecurityConfigurerAdapter {
+@Order(100)
+@Profile("fluent_api_user_custom_delegating_password_encoder")
+public class SecurityConfigurationFluentAPIWithCustomDelegatingPasswordEncoder extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -41,7 +41,7 @@ public class SecurityConfigurationFluentAPIWithDelegatingPasswordEncoder extends
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("student")
-                .password("{bcrypt}$2a$10$DAZWSXKXiWJcAibCS8.CguwekNABqhTwT8exLy8Z//MZZAJVSakuW")
+                .password("{bcrypt15}$2a$15$sNBm/n5HS/VAMciuivoGJuScgpkPeqUw5I7af0p.2MFASDqxtG5mG")
                 .roles("USER")
                 .and()
                 .withUser("admin")
@@ -51,6 +51,6 @@ public class SecurityConfigurationFluentAPIWithDelegatingPasswordEncoder extends
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return StudentPasswordEncoderFactory.createDelegatingPasswordEncoder();
     }
 }

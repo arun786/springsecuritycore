@@ -525,3 +525,93 @@ Here I want to have no security for url starting with /v2
             return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         }
     }
+
+
+# Custom Password Encoder
+
+    package com.arun.springsecuritycore.security;
+    
+    import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+    import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+    import org.springframework.security.crypto.password.PasswordEncoder;
+    
+    import java.util.HashMap;
+    import java.util.Map;
+    
+    /**
+     * @author arun on 9/7/20
+     */
+    public class StudentPasswordEncoderFactory {
+    
+        public static PasswordEncoder createDelegatingPasswordEncoder() {
+            String encodingId = "bcrypt";
+            Map<String, PasswordEncoder> encoders = new HashMap<>();
+            encoders.put(encodingId, new BCryptPasswordEncoder());
+            encoders.put("bcrypt15", new BCryptPasswordEncoder(15));
+            encoders.put("ldap", new org.springframework.security.crypto.password.LdapShaPasswordEncoder());
+            encoders.put("noop", org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance());
+            encoders.put("sha256", new org.springframework.security.crypto.password.StandardPasswordEncoder());
+    
+            return new DelegatingPasswordEncoder(encodingId, encoders);
+        }
+    }
+    
+Add the securityAdaptor
+
+    package com.arun.springsecuritycore.config;
+    
+    import com.arun.springsecuritycore.security.StudentPasswordEncoderFactory;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.context.annotation.Profile;
+    import org.springframework.core.annotation.Order;
+    import org.springframework.http.HttpMethod;
+    import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+    import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+    import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+    import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+    import org.springframework.security.crypto.password.PasswordEncoder;
+    
+  
+    @EnableWebSecurity
+    @Configuration
+    @Order(100)
+    @Profile("fluent_api_user_custom_delegating_password_encoder")
+    public class SecurityConfigurationFluentAPIWithCustomDelegatingPasswordEncoder extends WebSecurityConfigurerAdapter {
+    
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .authorizeRequests(authorize -> authorize.antMatchers(HttpMethod.GET, "/v2/**").permitAll())
+                    .authorizeRequests()
+                    .anyRequest().authenticated()
+                    .and()
+                    .formLogin().and()
+                    .httpBasic();
+        }
+    
+        /**
+         * student will use bcrypt
+         * and admin will use sha256
+         *
+         * @param auth
+         * @throws Exception
+         */
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.inMemoryAuthentication()
+                    .withUser("student")
+                    .password("{bcrypt15}$2a$15$sNBm/n5HS/VAMciuivoGJuScgpkPeqUw5I7af0p.2MFASDqxtG5mG")
+                    .roles("USER")
+                    .and()
+                    .withUser("admin")
+                    .password("{sha256}e956ed1382e539dbf4e6a5c0309eb8fc4bb1dcaa71c819af19e8bdae87b1d77af141a0538dd09881")
+                    .roles("ADMIN");
+        }
+    
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return StudentPasswordEncoderFactory.createDelegatingPasswordEncoder();
+        }
+    }
+
