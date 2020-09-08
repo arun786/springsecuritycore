@@ -9,15 +9,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @EnableWebSecurity
 @Configuration
-@Order(105)
-@Profile("fluent_api_user_ldap_password_encoder")
-public class SecurityConfigurationFluentAPIWithLdapEncoder extends WebSecurityConfigurerAdapter {
+@Order(100)
+@Profile("fluent_api_user_bencrypt_password_encoder")
+public class SecurityConfigurationFluentAPIWithBCryptEncoder extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -34,16 +34,16 @@ public class SecurityConfigurationFluentAPIWithLdapEncoder extends WebSecurityCo
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("student")
-                .password("{SSHA}v5nAsGzRuA+PWyveT2jH7TqU8eNMNBZNYv7PFA==")
+                .password("$2a$10$DAZWSXKXiWJcAibCS8.CguwekNABqhTwT8exLy8Z//MZZAJVSakuW")
                 .roles("USER")
                 .and()
                 .withUser("admin")
-                .password("{SSHA}81/VhsnqiDlulryB5ag3K6vvEZZeT2iAxPG5Pg==")
+                .password("$2a$10$iofIqijAEgQcFpwjgvGdgO1iRgjvV6gTXHWqyWGz.UtFzwoYTNPj.")
                 .roles("ADMIN");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new LdapShaPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 }

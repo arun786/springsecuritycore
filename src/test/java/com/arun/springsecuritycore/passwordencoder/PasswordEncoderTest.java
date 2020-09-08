@@ -1,6 +1,7 @@
 package com.arun.springsecuritycore.passwordencoder;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,10 +47,10 @@ public class PasswordEncoderTest {
 
 
         String ldapstudent = ldap.encode("ldapstudent");
-        System.out.println(ldapstudent);
+        System.out.println(ldapstudent); //{SSHA}v5nAsGzRuA+PWyveT2jH7TqU8eNMNBZNYv7PFA==
 
         String ldapadmin = ldap.encode("ldapadmin");
-        System.out.println(ldapadmin);
+        System.out.println(ldapadmin); //{SSHA}81/VhsnqiDlulryB5ag3K6vvEZZeT2iAxPG5Pg==
     }
 
     @Test
@@ -67,9 +68,9 @@ public class PasswordEncoderTest {
 
         //Everytime it will generate a new value
         String encodeStudentApp = sha256.encode("student");
-        System.out.println(encodeStudentApp);
+        System.out.println(encodeStudentApp); //67df0c8329a0bfc0650395cadfbd88437a98272e9d5fcdb6da4f37ad6ddbd2d21d1864bacea8f45e
         String encodeAdminApp = sha256.encode("admin");
-        System.out.println(encodeAdminApp);
+        System.out.println(encodeAdminApp);//e956ed1382e539dbf4e6a5c0309eb8fc4bb1dcaa71c819af19e8bdae87b1d77af141a0538dd09881
     }
 
     @Test
@@ -77,5 +78,14 @@ public class PasswordEncoderTest {
         PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
         String student = passwordEncoder.encode("student");
         System.out.println(student);
+    }
+
+    @Test
+    void bEncryptEncoder() {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String student = passwordEncoder.encode("student");
+        System.out.println(student); //$2a$10$DAZWSXKXiWJcAibCS8.CguwekNABqhTwT8exLy8Z//MZZAJVSakuW
+        String admin = passwordEncoder.encode("admin");
+        System.out.println(admin);//$2a$10$iofIqijAEgQcFpwjgvGdgO1iRgjvV6gTXHWqyWGz.UtFzwoYTNPj.
     }
 }
