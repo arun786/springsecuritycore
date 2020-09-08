@@ -9,14 +9,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 @EnableWebSecurity
 @Configuration
-@Order(104)
-@Profile("fluent_api_user_password_encoder")
-public class SecurityConfigurationFluentAPIWithPasswordEncoder extends WebSecurityConfigurerAdapter {
+@Order(100)
+@Profile("fluent_api_user_ldap_password_encoder")
+public class SecurityConfigurationFluentAPIWithLdapEncoder extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,16 +34,16 @@ public class SecurityConfigurationFluentAPIWithPasswordEncoder extends WebSecuri
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("student")
-                .password("student")
+                .password("ldapstudent")
                 .roles("USER")
                 .and()
                 .withUser("admin")
-                .password("admin")
+                .password("ldapadmin")
                 .roles("ADMIN");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new LdapShaPasswordEncoder();
     }
 }
