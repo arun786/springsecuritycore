@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
-@Order(105)
+@Order(100)
 @Profile("fluent_api_user_ldap_password_encoder")
 public class SecurityConfigurationFluentAPIWithLdapEncoder extends WebSecurityConfigurerAdapter {
 
@@ -34,11 +34,11 @@ public class SecurityConfigurationFluentAPIWithLdapEncoder extends WebSecurityCo
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("student")
-                .password("ldapstudent")
+                .password("{SSHA}v5nAsGzRuA+PWyveT2jH7TqU8eNMNBZNYv7PFA==")
                 .roles("USER")
                 .and()
                 .withUser("admin")
-                .password("ldapadmin")
+                .password("{SSHA}81/VhsnqiDlulryB5ag3K6vvEZZeT2iAxPG5Pg==")
                 .roles("ADMIN");
     }
 

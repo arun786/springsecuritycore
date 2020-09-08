@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
-@Order(100)
+@Order(105)
 @Profile("fluent_api_user_sha256_password_encoder")
 public class SecurityConfigurationFluentAPIWithSha256Encoder extends WebSecurityConfigurerAdapter {
 

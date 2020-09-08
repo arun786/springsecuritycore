@@ -2,6 +2,7 @@ package com.arun.springsecuritycore.passwordencoder;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.util.DigestUtils;
@@ -42,6 +43,13 @@ public class PasswordEncoderTest {
         //values will be different, but ldap will decrypt to the same value
         assertTrue(ldap.matches(PASSWORD, encode1));
         assertTrue(ldap.matches(PASSWORD, encode));
+
+
+        String ldapstudent = ldap.encode("ldapstudent");
+        System.out.println(ldapstudent);
+
+        String ldapadmin = ldap.encode("ldapadmin");
+        System.out.println(ldapadmin);
     }
 
     @Test
@@ -53,8 +61,8 @@ public class PasswordEncoderTest {
         String encode1 = sha256.encode(PASSWORD);
         System.out.println(encode1);
 
-        assertTrue(sha256.matches(PASSWORD,encode1));
-        assertTrue(sha256.matches(PASSWORD,encode));
+        assertTrue(sha256.matches(PASSWORD, encode1));
+        assertTrue(sha256.matches(PASSWORD, encode));
 
 
         //Everytime it will generate a new value
@@ -62,5 +70,12 @@ public class PasswordEncoderTest {
         System.out.println(encodeStudentApp);
         String encodeAdminApp = sha256.encode("admin");
         System.out.println(encodeAdminApp);
+    }
+
+    @Test
+    void passwordEncoder() {
+        PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
+        String student = passwordEncoder.encode("student");
+        System.out.println(student);
     }
 }
