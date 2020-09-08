@@ -3,6 +3,7 @@ package com.arun.springsecuritycore.passwordencoder;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.util.DigestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,5 +42,25 @@ public class PasswordEncoderTest {
         //values will be different, but ldap will decrypt to the same value
         assertTrue(ldap.matches(PASSWORD, encode1));
         assertTrue(ldap.matches(PASSWORD, encode));
+    }
+
+    @Test
+    void testSha256() {
+        PasswordEncoder sha256 = new StandardPasswordEncoder();
+        String encode = sha256.encode(PASSWORD);
+        System.out.println(encode);
+
+        String encode1 = sha256.encode(PASSWORD);
+        System.out.println(encode1);
+
+        assertTrue(sha256.matches(PASSWORD,encode1));
+        assertTrue(sha256.matches(PASSWORD,encode));
+
+
+        //Everytime it will generate a new value
+        String encodeStudentApp = sha256.encode("student");
+        System.out.println(encodeStudentApp);
+        String encodeAdminApp = sha256.encode("admin");
+        System.out.println(encodeAdminApp);
     }
 }
