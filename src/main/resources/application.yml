@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
 
   profiles:
-    active: fluent_api_user_password_encoder
+    active: fluent_api_user_ldap_password_encoder
 
 ---
 
@@ -39,3 +39,7 @@ spring:
 ---
 spring:
   profiles: fluent_api_user_password_encoder
+
+---
+spring:
+  profiles: fluent_api_user_ldap_password_encoder
