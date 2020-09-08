@@ -88,4 +88,11 @@ public class PasswordEncoderTest {
         String admin = passwordEncoder.encode("admin");
         System.out.println(admin);//$2a$10$iofIqijAEgQcFpwjgvGdgO1iRgjvV6gTXHWqyWGz.UtFzwoYTNPj.
     }
+
+    @Test
+    void bEncryptPasswordEncoder15() {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(15);
+        String student = passwordEncoder.encode("studentadwiti");
+        System.out.println(student); //$2a$15$sNBm/n5HS/VAMciuivoGJuScgpkPeqUw5I7af0p.2MFASDqxtG5mG
+    }
 }
