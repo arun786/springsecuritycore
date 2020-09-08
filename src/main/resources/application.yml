@@ -47,3 +47,7 @@ spring:
 ---
 spring:
   profiles: fluent_api_user_sha256_password_encoder
+
+---
+spring:
+  profiles: fluent_api_user_bencrypt_password_encoder
