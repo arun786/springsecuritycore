@@ -22,7 +22,7 @@ public class SecurityConfigurationFluentAPIWithCustomDelegatingPasswordEncoder e
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(auth -> auth.antMatchers("/h2-console/").permitAll())
+                .authorizeRequests(auth -> auth.antMatchers("/h2-console/**").permitAll())
                 .authorizeRequests(authorize -> authorize.antMatchers(HttpMethod.GET, "/v2/**").permitAll())
                 .authorizeRequests()
                 .anyRequest().authenticated()
@@ -31,7 +31,7 @@ public class SecurityConfigurationFluentAPIWithCustomDelegatingPasswordEncoder e
                 .httpBasic();
 
         http.csrf().disable();
-        http.headers().frameOptions().disable();
+        http.headers().frameOptions().sameOrigin();
     }
 
     /**
