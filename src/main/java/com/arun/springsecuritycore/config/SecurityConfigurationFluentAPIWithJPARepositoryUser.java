@@ -21,8 +21,11 @@ public class SecurityConfigurationFluentAPIWithJPARepositoryUser extends WebSecu
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(auth -> auth.antMatchers("/h2-console/**").permitAll())
-                .authorizeRequests(authorize -> authorize.antMatchers(HttpMethod.GET, "/v2/**").permitAll())
+                .authorizeRequests(authorize -> {
+                    authorize.antMatchers(HttpMethod.GET, "/v2/**").permitAll()
+                            .antMatchers("/h2-console/**").permitAll()
+                            .antMatchers(HttpMethod.DELETE, "/v1/**").hasRole("ADMIN");
+                })
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()

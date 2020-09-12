@@ -4,9 +4,11 @@ import com.arun.springsecuritycore.domain.Student;
 import com.arun.springsecuritycore.mapper.StudentMapper;
 import com.arun.springsecuritycore.model.StudentDomain;
 import com.arun.springsecuritycore.repository.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import java.util.Optional;
  */
 
 @Service
+@Slf4j
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
@@ -46,5 +49,11 @@ public class StudentServiceImpl implements StudentService {
 
         Optional<StudentDomain> student = studentRepository.findById(id);
         return student.map(studentMapper::studentDomainToStudent).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudent(String name) {
+        studentRepository.deleteByName(name);
     }
 }

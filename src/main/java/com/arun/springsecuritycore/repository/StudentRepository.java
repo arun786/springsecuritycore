@@ -11,4 +11,6 @@ import java.util.List;
 public interface StudentRepository extends PagingAndSortingRepository<StudentDomain, Long> {
 
     List<StudentDomain> findByName(String name);
+
+    void deleteByName(String name);
 }
