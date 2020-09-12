@@ -1,7 +1,7 @@
 package com.arun.springsecuritycore.bootstrap;
 
 import com.arun.springsecuritycore.domain.Authority;
-import com.arun.springsecuritycore.domain.User;
+import com.arun.springsecuritycore.domain.UserDomain;
 import com.arun.springsecuritycore.repository.security.AuthorityRepository;
 import com.arun.springsecuritycore.repository.security.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class UserLoader implements CommandLineRunner {
         if (userRepository.findByUsername("spring").isEmpty()) {
             Set<Authority> userRoles = new HashSet<>();
             userRoles.add(ADMIN_ROLE);
-            User spring = new User().setUsername("spring").setPassword(passwordEncoder.encode("guru")).setAuthorities(userRoles);
+            UserDomain spring = new UserDomain().setUsername("spring").setPassword(passwordEncoder.encode("guru")).setAuthorities(userRoles);
             userRepository.save(spring);
             log.info("spring user loaded ");
         }
@@ -48,7 +48,7 @@ public class UserLoader implements CommandLineRunner {
         if (userRepository.findByUsername("user").isEmpty()) {
             Set<Authority> userRoles = new HashSet<>();
             userRoles.add(USER_ROLE);
-            User spring = new User().setUsername("user").setPassword(passwordEncoder.encode("password")).setAuthorities(userRoles);
+            UserDomain spring = new UserDomain().setUsername("user").setPassword(passwordEncoder.encode("password")).setAuthorities(userRoles);
             userRepository.save(spring);
             log.info("user user loaded ");
         }
@@ -56,7 +56,7 @@ public class UserLoader implements CommandLineRunner {
         if (userRepository.findByUsername("scott").isEmpty()) {
             Set<Authority> userRoles = new HashSet<>();
             userRoles.add(CUSTOMER_ROLE);
-            User spring = new User().setUsername("scott").setPassword(passwordEncoder.encode("tiger")).setAuthorities(userRoles);
+            UserDomain spring = new UserDomain().setUsername("scott").setPassword(passwordEncoder.encode("tiger")).setAuthorities(userRoles);
             userRepository.save(spring);
             log.info("scott user loaded ");
         }
@@ -65,7 +65,7 @@ public class UserLoader implements CommandLineRunner {
     private void loadAuthorities() {
         ADMIN_ROLE = new Authority().setRoles("ADMIN");
         USER_ROLE = new Authority().setRoles("USER");
-        CUSTOMER_ROLE = new Authority().setRoles("customer");
+        CUSTOMER_ROLE = new Authority().setRoles("CUSTOMER");
 
         authorityRepository.save(ADMIN_ROLE);
         authorityRepository.save(USER_ROLE);

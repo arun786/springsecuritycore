@@ -12,8 +12,8 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Entity
-public class User {
+@Entity(name = "user")
+public class UserDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
