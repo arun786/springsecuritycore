@@ -37,9 +37,15 @@ public class StudentController {
         return ResponseEntity.ok(studentById);
     }
 
-    @DeleteMapping(value ="/v1/student")
+    @DeleteMapping(value = "/v1/student")
     public ResponseEntity<HttpStatus> deleteStudent(@RequestParam String name) {
         studentService.deleteStudent(name);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(value = "/v1/students")
+    public ResponseEntity<List<Student>> getStudents() {
+        List<Student> students = studentService.getStudents();
+        return ResponseEntity.ok(students);
     }
 }
