@@ -1104,3 +1104,89 @@ Two endpoints for v3 are delete and list
     
         //configure method is not required
     }
+
+
+# Method Security
+
+    Enable securuty on methods for v4 
+    
+    To enable global method security, put the below annotation
+    
+    @EnableGlobalMethodSecurity(securedEnabled = true)
+    
+    
+    package com.arun.springsecuritycore.config;
+    
+    import com.arun.springsecuritycore.security.StudentPasswordEncoderFactory;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.context.annotation.Profile;
+    import org.springframework.core.annotation.Order;
+    import org.springframework.http.HttpMethod;
+    import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+    import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+    import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+    import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+    import org.springframework.security.crypto.password.PasswordEncoder;
+    
+    
+    @EnableWebSecurity
+    @Configuration
+    @Order(100)
+    @EnableGlobalMethodSecurity(securedEnabled = true)
+    @Profile("fluent_api_user_jpa_repository")
+    public class SecurityConfigurationFluentAPIWithJPARepositoryUser extends WebSecurityConfigurerAdapter {
+    
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .authorizeRequests(authorize -> {
+                        authorize.antMatchers(HttpMethod.GET, "/v2/**").permitAll()
+                                .antMatchers("/h2-console/**").permitAll()
+                                .antMatchers(HttpMethod.DELETE, "/v1/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.GET, "/v1/students").hasRole("CUSTOMER")
+                                .antMatchers(HttpMethod.GET, "/v3/*").hasAnyRole("ADMIN", "CUSTOMER")
+                                .antMatchers(HttpMethod.DELETE, "/v3/*").hasAnyRole("ADMIN", "CUSTOMER");
+                    })
+                    .authorizeRequests()
+                    .anyRequest().authenticated()
+                    .and()
+                    .formLogin().and()
+                    .httpBasic();
+    
+            http.csrf().disable();
+            http.headers().frameOptions().sameOrigin();
+        }
+    
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return StudentPasswordEncoderFactory.createDelegatingPasswordEncoder();
+        }
+    
+        //configure method is not required
+    }
+
+    
+    
+    
+## added two endpoints in the controller
+
+Add the annotation on the methods
+
+        @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+
+
+        @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+        @DeleteMapping(value = "/v4/student")
+        public ResponseEntity<HttpStatus> deleteStudentV4(@RequestParam String name) {
+            studentService.deleteStudent(name);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        
+        @Secured({"ROLE_USER", "ROLE_CUSTOMER"})
+        @GetMapping(value = "/v4/students")
+        public ResponseEntity<List<Student>> getStudentsV4() {
+            List<Student> students = studentService.getStudents();
+            return ResponseEntity.ok(students);
+        }
+    

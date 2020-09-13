@@ -5,6 +5,7 @@ import com.arun.springsecuritycore.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,6 +58,21 @@ public class StudentController {
 
     @GetMapping(value = "/v3/students")
     public ResponseEntity<List<Student>> getStudentsV3() {
+        List<Student> students = studentService.getStudents();
+        return ResponseEntity.ok(students);
+    }
+
+
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @DeleteMapping(value = "/v4/student")
+    public ResponseEntity<HttpStatus> deleteStudentV4(@RequestParam String name) {
+        studentService.deleteStudent(name);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @Secured({"ROLE_USER", "ROLE_CUSTOMER"})
+    @GetMapping(value = "/v4/students")
+    public ResponseEntity<List<Student>> getStudentsV4() {
         List<Student> students = studentService.getStudents();
         return ResponseEntity.ok(students);
     }
