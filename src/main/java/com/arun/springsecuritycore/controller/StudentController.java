@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,5 +76,13 @@ public class StudentController {
     public ResponseEntity<List<Student>> getStudentsV4() {
         List<Student> students = studentService.getStudents();
         return ResponseEntity.ok(students);
+    }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = "/v1/student")
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+        Student response = studentService.addStudent(student);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

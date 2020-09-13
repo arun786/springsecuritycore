@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @Configuration
 @Order(100)
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Profile("fluent_api_user_jpa_repository")
 public class SecurityConfigurationFluentAPIWithJPARepositoryUser extends WebSecurityConfigurerAdapter {
 
