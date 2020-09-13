@@ -48,4 +48,16 @@ public class StudentController {
         List<Student> students = studentService.getStudents();
         return ResponseEntity.ok(students);
     }
+
+    @DeleteMapping(value = "/v3/student")
+    public ResponseEntity<HttpStatus> deleteStudentV3(@RequestParam String name) {
+        studentService.deleteStudent(name);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(value = "/v3/students")
+    public ResponseEntity<List<Student>> getStudentsV3() {
+        List<Student> students = studentService.getStudents();
+        return ResponseEntity.ok(students);
+    }
 }

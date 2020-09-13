@@ -1031,3 +1031,76 @@ Controller will have the below code
     
         //configure method is not required
     }
+
+
+# Allow the /v3/* be accessed by multiple roles, CUSTOMER and ADMIN
+
+
+Two endpoints for v3 are delete and list
+
+       @DeleteMapping(value = "/v3/student")
+        public ResponseEntity<HttpStatus> deleteStudentV3(@RequestParam String name) {
+            studentService.deleteStudent(name);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+    
+        @GetMapping(value = "/v3/students")
+        public ResponseEntity<List<Student>> getStudentsV3() {
+            List<Student> students = studentService.getStudents();
+            return ResponseEntity.ok(students);
+        }
+        
+## configuration in SecurityConfig
+
+    .antMatchers(HttpMethod.GET, "/v3/*").hasAnyRole("ADMIN", "CUSTOMER")
+    .antMatchers(HttpMethod.DELETE, "/v3/*").hasAnyRole("ADMIN", "CUSTOMER");
+                                
+
+    package com.arun.springsecuritycore.config;
+    
+    import com.arun.springsecuritycore.security.StudentPasswordEncoderFactory;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.context.annotation.Profile;
+    import org.springframework.core.annotation.Order;
+    import org.springframework.http.HttpMethod;
+    import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+    import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+    import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+    import org.springframework.security.crypto.password.PasswordEncoder;
+    
+    
+    @EnableWebSecurity
+    @Configuration
+    @Order(100)
+    @Profile("fluent_api_user_jpa_repository")
+    public class SecurityConfigurationFluentAPIWithJPARepositoryUser extends WebSecurityConfigurerAdapter {
+    
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .authorizeRequests(authorize -> {
+                        authorize.antMatchers(HttpMethod.GET, "/v2/**").permitAll()
+                                .antMatchers("/h2-console/**").permitAll()
+                                .antMatchers(HttpMethod.DELETE, "/v1/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.GET, "/v1/students").hasRole("CUSTOMER")
+                                .antMatchers(HttpMethod.GET, "/v3/*").hasAnyRole("ADMIN", "CUSTOMER")
+                                .antMatchers(HttpMethod.DELETE, "/v3/*").hasAnyRole("ADMIN", "CUSTOMER");
+                    })
+                    .authorizeRequests()
+                    .anyRequest().authenticated()
+                    .and()
+                    .formLogin().and()
+                    .httpBasic();
+    
+            http.csrf().disable();
+            http.headers().frameOptions().sameOrigin();
+        }
+    
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return StudentPasswordEncoderFactory.createDelegatingPasswordEncoder();
+        }
+    
+        //configure method is not required
+    }
