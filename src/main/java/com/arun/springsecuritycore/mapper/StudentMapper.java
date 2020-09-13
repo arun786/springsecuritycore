@@ -11,4 +11,6 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface StudentMapper {
     Student studentDomainToStudent(StudentDomain studentDomain);
+
+    StudentDomain studentToStudentDomain(Student student);
 }

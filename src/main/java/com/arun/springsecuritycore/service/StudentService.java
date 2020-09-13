@@ -16,4 +16,6 @@ public interface StudentService {
     void deleteStudent(String name);
 
     List<Student> getStudents();
+
+    Student addStudent(Student student);
 }
