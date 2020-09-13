@@ -63,9 +63,9 @@ public class UserLoader implements CommandLineRunner {
     }
 
     private void loadAuthorities() {
-        ADMIN_ROLE = new Authority().setRoles("ADMIN");
-        USER_ROLE = new Authority().setRoles("USER");
-        CUSTOMER_ROLE = new Authority().setRoles("CUSTOMER");
+        ADMIN_ROLE = new Authority().setRoles("ROLE_ADMIN");
+        USER_ROLE = new Authority().setRoles("ROLE_USER");
+        CUSTOMER_ROLE = new Authority().setRoles("ROLE_CUSTOMER");
 
         authorityRepository.save(ADMIN_ROLE);
         authorityRepository.save(USER_ROLE);
