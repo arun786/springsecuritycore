@@ -56,4 +56,15 @@ public class StudentServiceImpl implements StudentService {
     public void deleteStudent(String name) {
         studentRepository.deleteByName(name);
     }
+
+    @Override
+    public List<Student> getStudents() {
+        Iterable<StudentDomain> studentsDomain = studentRepository.findAll();
+        List<Student> students = new ArrayList<>();
+        studentsDomain.forEach(sd -> {
+            Student student = studentMapper.studentDomainToStudent(sd);
+            students.add(student);
+        });
+        return students;
+    }
 }

@@ -24,7 +24,8 @@ public class SecurityConfigurationFluentAPIWithJPARepositoryUser extends WebSecu
                 .authorizeRequests(authorize -> {
                     authorize.antMatchers(HttpMethod.GET, "/v2/**").permitAll()
                             .antMatchers("/h2-console/**").permitAll()
-                            .antMatchers(HttpMethod.DELETE, "/v1/**").hasRole("ADMIN");
+                            .antMatchers(HttpMethod.DELETE, "/v1/**").hasRole("ADMIN")
+                            .antMatchers(HttpMethod.GET, "/v1/students").hasRole("CUSTOMER");
                 })
                 .authorizeRequests()
                 .anyRequest().authenticated()
